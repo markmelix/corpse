@@ -1,6 +1,8 @@
 from dataclasses import dataclass as component
+from creature import Creature
 import pygame
 import esper
+from render import Renderable
 import utils
 
 
@@ -8,19 +10,21 @@ class ItemsProcessor(esper.Processor):
     def process(self, **_):
 
         from location import Position
+        from creature import Creature
 
-        player, pos = utils.player(self, Position, id=True)
-        x_player = pos.coords.x
-        y_player = pos.coords.y
+        for creature, (_, creature_render) in self.world.get_components(Creature, Renderable):
+            creature_sprite = utils.player(self, Renderable).sprite
+            if creature_sprite is None:
+                continue
 
-        items_sprite = utils.items_group(self).group
-        for sprite in items_sprite:
-            x_item = sprite.rect.x
-            y_item = sprite.rect.y
-            if (x_player - x_item == 8 or x_item - x_player == 8) and (
-                y_player - y_item == 8 or y_item - y_player == 8
-            ):
-                print("item near")
+            for item, (_, item_render) in self.world.get_components(Item, Renderable):
+                item_sprite = render.sprite
+                if item_sprite is None:
+                    continue
+
+                if pygame.sprite.collide_mask(creature_sprite, item_sprite):
+                    self.world.creature_entity(HandleItemRequest(creature, item))
+                    
 
 
 class ItemsGroupingProcessor(esper.Processor):
@@ -42,6 +46,12 @@ class ItemsGroup:
 @component
 class Item:
     pass
+
+
+@component
+class HandleItemRequest:
+    entity_id: int
+    item_id: int
 
 
 @component
