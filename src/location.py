@@ -2,6 +2,7 @@ import pygame
 import esper
 import pytmx
 import pyscroll
+from meta import Id
 import utils
 
 from enum import IntEnum, auto
@@ -117,6 +118,7 @@ class InitLocationProcessor(esper.Processor):
         for entity, request in self.world.get_component(LocationInitRequest):
             location = self._make_location(entity, request.id)
             self.world.add_component(entity, location)
+            self.world.add_component(entity, Id(request.id))
             self.world.remove_component(entity, LocationInitRequest)
 
 
