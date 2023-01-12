@@ -29,6 +29,7 @@ from chrono import DayNightCyclingProcessor
 from object import SolidGroup, SolidGroupingProcessor
 from movement import MovementProcessor, RotationProcessor
 from chunk import ChunkUnloadingProcessor, ChunkLoadingProcessor
+# from inventory import InventoryProcessr
 
 PROCESSORS = (
     EventProcessor,
@@ -46,6 +47,7 @@ PROCESSORS = (
     RenderProcessor,
     DayNightCyclingProcessor,
     UiDrawingProcessor,
+    # InventoryProcessr,
 )
 
 CHUNK_LOADER_PROCESSORS = (
